@@ -1,0 +1,39 @@
+---
+- hosts: nginx
+  become: yes
+  gather_facts: true
+  pre_tasks:
+    - name: install python2
+      raw: apt-get install python-simplejson -y
+#    - name: installing repo for Java 8 in Ubuntu
+#      apt_repository: repo='ppa:openjdk-r/ppa'
+#      raw: ansible-galaxy install geerlingguy.java
+#      raw: ansible-galaxy install kami911.tomcat
+#    - name: ansible galaxy
+#      src: 
+#        - geerlingguy.java
+#        - kami911.tomcat
+  roles:
+    - geerlingguy.java
+    - ferrarimarco.tomcat
+#      java_packages:
+#        - openjdk-8-jdk
+#    - kami911.tomcat
+  
+#  tasks:
+#    - name: ansible galaxy
+#      src: geerlingguy.java 
+#      src: kami911.tomcat
+    
+#    - name: Install a list of packages
+#      apt:
+#        update_cache: yes
+#        state: latest
+#    - name: Install a list of packages
+#      apt:
+#        name: "{{ packages }}"
+#      vars:
+#        packages:
+#        - git
+#        - maven
+#        - wget

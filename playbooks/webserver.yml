@@ -1,0 +1,45 @@
+---
+- hosts: aws
+  become: yes
+  gather_facts: no
+  pre_tasks:
+    - name: install python2
+      raw: apt-get install python-simplejson -y
+  tasks:
+    - name: Install a list of packages
+      apt:
+        update_cache: yes
+        state: latest
+    - name: Install a list of packages
+      apt:
+        name: "{{ packages }}"
+      vars:
+        packages:
+        - git
+        - openjdk-8-jdk
+        - maven
+        - wget
+    - name: environment
+      environment:
+        JAVA_HOME: /usr/lib/jvm/java-8-openjdk-amd64
+      shell: "echo $JAVA_HOME"
+    - file:
+        state: absent
+        path: /tmp/AssigningTask
+    - file:
+        state: absent
+        path: /tmp/apache-tomcat-8.5.33
+    - git:
+        repo: 'https://github.com/iankesh/AssigningTask.git'
+        dest: /tmp/AssigningTask
+    - command: mvn clean install -Dmaven.test.skip=true
+      args:
+        chdir: /tmp/AssigningTask
+    - unarchive:
+        src: https://archive.apache.org/dist/tomcat/tomcat-8/v8.5.33/bin/apache-tomcat-8.5.33.tar.gz
+        dest: /tmp
+        remote_src: yes
+    - copy:
+        src: /tmp/AssigningTask/target/Spring201-0.0.1-SNAPSHOT.war
+        dest: /tmp/apache-tomcat-8.5.33/webapps/Spring201-0.0.1-SNAPSHOT.war
+        remote_src: yes

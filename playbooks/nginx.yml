@@ -1,0 +1,12 @@
+---
+- hosts: localhost
+#  become_method: sudo
+  become: yes
+  tasks:
+    - shell: apt-get update
+    - name: ensure nginx is at the latest version
+      apt: name=nginx state=latest
+    - name: start nginx
+      service:
+          name: nginx
+          state: started

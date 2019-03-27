@@ -1,0 +1,35 @@
+---
+- hosts: nginx
+  become: yes
+  gather_facts: no
+  pre_tasks:
+    - name: install python2
+      raw: apt-get install python-simplejson -y
+      raw: ansible-galaxy install geerlingguy.java
+      raw: ansible-galaxy install kami911.tomcat
+#    - name: ansible galaxy
+#      src: 
+#        - geerlingguy.java
+#        - kami911.tomcat
+  roles:
+    - {role: geerlingguy.java}
+
+    - {role: tomcat}
+  
+#  tasks:
+#    - name: ansible galaxy
+#      src: geerlingguy.java 
+#      src: kami911.tomcat
+    
+#    - name: Install a list of packages
+#      apt:
+#        update_cache: yes
+#        state: latest
+#    - name: Install a list of packages
+#      apt:
+#        name: "{{ packages }}"
+#      vars:
+#        packages:
+#        - git
+#        - maven
+#        - wget

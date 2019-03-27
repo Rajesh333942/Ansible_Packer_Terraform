@@ -1,0 +1,38 @@
+{
+
+"variables": {
+	"aws_access_key": "AKIAJLGA77E4CDLMCAKQ",
+	"aws_secret_key": "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"
+},
+
+"builders": [{
+	"type": "amazon-ebs",
+	"access_key": "{{user `aws_access_key`}}",
+	"secret_key": "{{user `aws_secret_key`}}",
+	"region": "us-west-2",
+	"source_ami": "ami-076e276d85f524150",
+	"instance_type": "t2.micro",
+	"ssh_username": "ubuntu",
+	"ami_name": "app"
+	}],
+
+"provisioners":[
+    {
+      "type": "shell",
+      "inline": [
+        "sudo apt-get -y update",
+        "sudo apt-get install -y software-properties-common",
+        "sudo apt-add-repository ppa:ansible/ansible",
+        "sudo apt-get -y update",
+        "sudo apt-get install -y ansible",
+        "ansible --version"
+      ]
+},
+
+{
+        "type": "ansible-local",
+        "playbook_file": "../playbooks/LoginWeb.yml"
+}
+
+]
+}   
